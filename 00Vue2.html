@@ -10,17 +10,26 @@
 
 <body>
     <div id="app">
-        <h1>{{typeof count}}</h1>
-        <hr>
-        <h1>{{name}}</h1>
-        <hr>
-        <h1>{{talk ? '愛講話':'吼唷'}}</h1>
-        <hr>
-        <h1>{{arr.length}}</h1>
-        <hr>
-        <h1>{{obj}}</h1>
+        <h1>{{count}}</h1>
     </div>
-    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        // 法一
+        /* new Vue({
+            data: {
+                count: 1
+            }, el: '#app'
+        }) */
+
+        // 法二
+        const App = new Vue({
+            data: {
+                count: 1
+            },
+        })
+        App.$mount('#app')
+    </script>
+    <!-- <script src="https://unpkg.com/vue@next"></script>
     <script>
         Vue.createApp({
             data() {
@@ -33,7 +42,7 @@
                 }
             }
         }).mount('#app')
-    </script>
+    </script> -->
 </body>
 
 </html>
