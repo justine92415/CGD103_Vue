@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .btn-wapper {
+            width: 300px;
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 auto;
+            margin-top: 100px;
+            border: 2px solid black;
+            padding: 10px;
+        }
+
+        .result {
+            width: 100%;
+            text-align: right;
+            font-size: 30px;
+        }
+
+        .num-wapper {
+            width: 75%;
+        }
+
+        .num-box,
+        .other-box,
+        .btn-back {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .num-box button,
+        .other-box button {
+            width: 33.3333%;
+            font-size: 30px;
+        }
+
+        .num-box button:nth-child(1) {
+            order: 4;
+        }
+
+        .num-box button:nth-child(2) {
+            order: 5;
+        }
+
+        .num-box button:nth-child(3) {
+            order: 6;
+        }
+
+        .num-box button:nth-child(4) {
+            order: 1;
+        }
+
+        .num-box button:nth-child(5) {
+            order: 2;
+        }
+
+        .num-box button:nth-child(6) {
+            order: 3;
+        }
+
+
+        .calc-box {
+            width: 25%;
+        }
+
+        .calc-box button {
+            width: 100%;
+            display: block;
+            font-size: 30px;
+        }
+
+        .btn-back button {
+            width: 100%;
+            font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="btn-wapper">
+        <div class="result">{{result}}</div>
+        <div class="num-wapper">
+            <div class="num-box">
+                <button v-for="num in 9" @click="keyNum(num)" :key="num">{{num}}</button>
+                <!-- <button>7</button>
+                <button>8</button>
+                <button>9</button>
+                <button>4</button>
+                <button>5</button>
+                <button>6</button>
+                <button>1</button>
+                <button>2</button>
+                <button>3</button> -->
+            </div>
+            <div class="other-box">
+                <button @click="keyNum(0)">0</button>
+                <button @click="keyDot('.')">.</button>
+                <button @click="clear">AC</button>
+            </div>
+            <div class="btn-back">
+                <button @click="back">
+                    ←
+                </button>
+            </div>
+        </div>
+        <div class="calc-box">
+            <button @click="calc('/')">/</button>
+            <button @click="calc('*')">*</button>
+            <button @click="calc('-')">-</button>
+            <button @click="calc('+')">+</button>
+            <button @click="equal">=</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    result: '0',
+                    sum: 0,
+                    isSolved: false,
+                    isKeyDot: false
+                }
+            },
+            methods: {
+                keyNum(num) {
+                    if (this.result === '0') {
+                        this.result = ''
+                    }
+                    this.afterSolvedKeyin()
+                    this.result += num
+                },
+                calc(operator) {
+                    this.result += operator
+                    this.resetState()
+                },
+                keyDot(dot) {
+                    this.afterSolvedKeyin()
+                    if (!this.isKeyDot) {
+                        this.result += dot
+                        this.isKeyDot = true
+                        this.isSolved = false
+                    }
+                }
+                ,
+                equal() {
+                    if (!this.result) return
+                    this.result = parseFloat(Function('return ' + this.result)().toFixed(6)).toString()
+                    this.isSolved = true
+                },
+                clear() {
+                    this.resetState()
+                    this.result = '0'
+                },
+                back() {
+                    let arr = this.result.split('')
+                    let dot = arr.pop()
+                    this.result = arr.join('')
+                    if (!arr.length) {
+                        this.result = '0'
+                    }
+                    if (dot === '.') {
+                        this.isKeyDot = false
+                    }
+                    if (this.isSolved) {
+                        this.result = '0'
+                    }
+                },
+                resetState() {
+                    this.isKeyDot = false
+                    this.isSolved = false
+                },
+                afterSolvedKeyin() {
+                    if (this.isSolved) {
+                        this.result = ''
+                        this.resetState()
+                    }
+                }
+
+            },
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
