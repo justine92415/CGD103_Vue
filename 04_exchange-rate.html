@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>台幣匯率計算</h1>
+        <div>
+            <div>
+                <label for="NTD">NTD.&nbsp;</label>
+                <input id="NTD" type="text" v-model.number="ntd" @input="twd2usd">
+            </div>
+            <div>
+                <span>&nbsp;=&nbsp;</span>
+                <label for="USD">USD.&nbsp;</label>
+                <input id="USD" type="text" v-model.number="usd" @input="usd2twd">
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    ntd: 1,
+                    usd: 32.11,
+                }
+            },
+            methods: {
+                twd2usd() {
+                    this.usd = this.ntd * 32.11
+                },
+                usd2twd() {
+                    this.ntd = this.usd / 32.11
+                },
+
+            },
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
