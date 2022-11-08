@@ -139,7 +139,7 @@
                     this.load = true
                     // 取得所有旅館資訊
                     // 他們資料太多(500筆)有時候不知道為什麼沒辦法全部拿到，所以只取50筆意思意思
-                    fetch('http://fake-hotel-api.herokuapp.com/api/hotels?count=50&no_error=1')
+                    fetch('https://fake-hotel-api.herokuapp.com/api/hotels?count=50&no_error=1')
                         .then(res => res.json())
                         .then(json => {
                             // 資料預處理，只取我要的資料
