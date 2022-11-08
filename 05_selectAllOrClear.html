@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .todo-wrapper {
+            text-align: center;
+            margin: auto;
+            width: 600px;
+            /* background-color: #fa0; */
+        }
+
+        .todo-group {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        .done {
+            color: #aaa
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Select All/Clear</h1>
+        <div class="todo-wrapper">
+            <div class="todo-group" v-for="(todo,index) in todos" :key="todo.id">
+                <input type="checkbox" name="" :value="todo" id="todo-item" v-model="dones">
+                <label :class="{done:todo.done}" for="todo-item">{{todo.do}}</label>
+            </div>
+            <button @click="selectOrClearAll">{{showSelectOrClear}} All</button>
+            <p>已選擇{{showSelectNum}}項</p>
+        </div>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script type="module">
+        import { v4 as uuid } from 'https://jspm.dev/uuid';
+        Vue.createApp({
+            data() {
+                return {
+                    todos: [{ id: uuid(), do: '吃飯', done: false },
+                    { id: uuid(), do: '睡覺', done: false },
+                    { id: uuid(), do: '看書', done: false },
+                    { id: uuid(), do: '打扣', done: false },
+                    { id: uuid(), do: '聽歌', done: false }],
+                    todoText: '',
+                    dones: [],
+                    isSelectAll: false
+                }
+            }, computed: {
+                showSelectOrClear() {
+                    return this.dones.length === this.todos.length ? 'Clear' : 'Select'
+                    // return this.isSelectAll ? 'Clear' : 'Select'
+                },
+                showSelectNum() {
+                    return this.dones.length
+                }
+            },
+            methods: {
+                selectOrClearAll() {
+                    this.isSelectAll = !this.isSelectAll
+                    if (this.isSelectAll) {
+                        this.dones = this.todos
+                    } else {
+                        this.dones = []
+                    }
+                }
+            },
+        }).mount('#app')
+    </script>
+</body>
+
+</html>

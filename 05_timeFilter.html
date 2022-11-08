@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>時間篩選</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .checked {
+            color: orange;
+        }
+
+        .input-wapper {
+            margin: 50px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .hotel-wrapper {
+            width: 1200px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: auto;
+            gap: 25px;
+        }
+
+        .card {
+            width: 300px;
+            border: 1px solid black;
+
+        }
+
+        .hotel-img {
+            width: 100%;
+        }
+
+        .hotel-img img {
+            width: 100%;
+            vertical-align: top;
+        }
+
+        .hotel-body {
+            padding: 10px 10px 0 10px;
+            font-size: 16px;
+        }
+
+        .hotel-name {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="input-wapper">
+            <div>
+                <label for="hotelName">旅館名稱： </label>
+                <input @keyup.enter="searchDate" id="hotelName" type="text" v-model="hotelName">
+            </div>
+            <div>
+                <label for="startDate">入住日期： </label>
+                <input id="startDate" type="date" v-model="bookStartDate" @change="disenbleBeforeDate">
+            </div>
+            <div>
+                <label for="endDate">退房日期： </label>
+                <input id="endDate" type="date" v-model="bookEndDate" ref="endDate">
+            </div>
+            <button @click="searchDate">查詢</button>
+            <button @click="reset">重設條件</button>
+        </div>
+
+        <div class="hotel-wrapper">
+            <div v-if="load">loading...</div>
+
+            <div class="card" v-for="hotel in source" :key="hotel.id">
+
+                <div class="hotel-img">
+                    <!-- api的圖掛了 -->
+                    <!-- <img :src='hotel.images[0]'> -->
+                    <img src="https://fakeimg.pl/300x200/200">
+                </div>
+
+                <div class="hotel-body">
+                    <span class="fa fa-star checked" v-for="(star,index) in hotel.stars" ::key="index"></span>
+
+                    <div class="hotel-name">{{hotel.name}}</div>
+                    <div class="hotel-location">
+                        Location: {{hotel.location}}
+                    </div>
+                    <div class="hotel-currentTime">
+                        <p>Start Date: {{hotel.startDate}}</p>
+                        <p>End Date: {{hotel.endDate}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@next"></script>
+
+    <!-- 引用dayjs cdn -->
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.6/plugin/isBetween.min.js"></script>
+    <!-- 沒用到 -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.6/plugin/customParseFormat.min.js"></script> -->
+
+    <script type="module">
+        // 使用 dayjs的isBetween plugin
+        dayjs.extend(window.dayjs_plugin_isBetween)
+        Vue.createApp({
+            data() {
+                return {
+                    bookStartDate: '',
+                    bookEndDate: '',
+                    hotelName: '',
+                    source: [],
+                    catch: [],
+                    load: false
+                }
+            },
+            methods: {
+                disenbleBeforeDate() {
+                    // 利用ref取得endDate的DOM物件，在選擇開始日期後，結束日期無法選擇之前的日期
+                    this.$refs.endDate.min = this.bookStartDate
+                    // 當使用者選擇開始日期後，結束日期自動選擇一天後的日子
+                    if (this.bookStartDate) {
+                        this.bookEndDate = dayjs(this.bookStartDate).add(1, 'day').format('YYYY-MM-DD')
+                    } else {
+                        // 當使用者清空開始日期後，結束日期跟著清空
+                        this.bookEndDate = ''
+                    }
+                },
+                getAllHotelData() {
+                    this.load = true
+                    // 取得所有旅館資訊
+                    // 他們資料太多(500筆)有時候不知道為什麼沒辦法全部拿到，所以只取50筆意思意思
+                    fetch('http://fake-hotel-api.herokuapp.com/api/hotels?count=50&no_error=1')
+                        .then(res => res.json())
+                        .then(json => {
+                            // 資料預處理，只取我要的資料
+                            this.source = json.map((hotel) => {
+                                return {
+                                    id: hotel.id,
+                                    name: hotel.name,
+                                    location: hotel.country,
+                                    startDate: dayjs(hotel.date_start).format('YYYY-MM-DD'),
+                                    endDate: dayjs(hotel.date_end).format('YYYY-MM-DD'),
+                                    stars: hotel.stars
+                                }
+                            })
+                            this.catch = this.source
+                            this.load = false
+                        }).catch(error => {
+                            // 他們的伺服器不知道為什麼有時候會500，這邊做error handling，請使用者重整頁面
+                            alert(`伺服器因不明原因抓不到資料，請重整頁面`)
+                        })
+                },
+                searchDate() {
+                    if (this.bookStartDate !== '' && this.bookEndDate !== '' && this.hotelName !== '') {
+                        this.source = this.catch.filter((hotel) => {
+                            // isBetween返回true/false，用來檢查某日期是否在某個期間內
+                            // 第四個參數 '[]'是否包含開始或結束日期，預設為 '()' 不包含 (預設值可忽略不寫))  
+                            // dayjs('2022-11-06').isBetween('2022-11-06', '2022-11-08', null) // return false
+                            // Example
+                            // dayjs('2022-11-06').isBetween('2022-11-06', '2022-11-08', null, '[]') // return true
+                            // dayjs('2022-11-06').isBetween('2022-11-06', '2022-11-08', null, '(]') // return false
+                            // dayjs('2022-11-08').isBetween('2022-11-06', '2022-11-08', null, '[]') // return true
+                            // dayjs('2022-11-08').isBetween('2022-11-06', '2022-11-08', null, '[)') // return false
+                            return dayjs(this.bookStartDate).isBetween(hotel.startDate, hotel.endDate, null, '[]')
+                                && dayjs(this.bookEndDate).isBetween(hotel.startDate, hotel.endDate, null, '[]')
+                                && hotel.name.includes(this.hotelName)
+                        })
+                    } else if (this.bookStartDate !== '' && this.bookEndDate !== '') {
+                        this.source = this.catch.filter((hotel) => {
+                            return dayjs(this.bookStartDate).isBetween(hotel.startDate, hotel.endDate, null, '[]')
+                                && dayjs(this.bookEndDate).isBetween(hotel.startDate, hotel.endDate, null, '[]')
+                        })
+                    } else if (this.hotelName !== '') {
+                        this.source = this.catch.filter((hotel) => {
+                            return hotel.name.includes(this.hotelName)
+                        })
+                    }
+                },
+                reset() {
+                    // 清空搜尋條件
+                    this.bookStartDate = ''
+                    this.bookEndDate = ''
+                    this.hotelName = ''
+                    this.source = this.catch
+                }
+            }, created() {
+                this.getAllHotelData()
+            },
+        }).mount('#app')
+    </script>
+</body>
+
+</html>

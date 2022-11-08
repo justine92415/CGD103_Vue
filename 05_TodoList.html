@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .todo-wrapper {
+            text-align: center;
+            margin: auto;
+            width: 600px;
+        }
+
+        .todo-group {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        .done {
+            color: #aaa
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>TodoList</h1>
+        <div class="todo-wrapper">
+            <div class="todo-group" v-for="(todo,index) in todos" :key="todo.id">
+                <input type="checkbox" name="" id="todo-item" v-model="todo.done">
+                <label :class="{done:todo.done}" for="todo-item">{{todo.do}}</label>
+                <button @click="deleteTodoItem(index)">刪除</button>
+            </div>
+            <div>
+                <label for="todo-textbox">新增代辦事項</label>
+                <input @keyup.enter="createNewTodoItme" id="todo-textbox" type="text" v-model="todoText">
+                <button @click="createNewTodoItme">送出</button>
+            </div>
+            <div>
+                共{{showAllTodos}}件代辦事項，已完成{{showAllDone}}件
+            </div>
+
+        </div>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+
+    <script type="module">
+        import { v4 as uuid } from 'https://jspm.dev/uuid';
+        Vue.createApp({
+            data() {
+                return {
+                    todos: [{ id: uuid(), do: '吃飯', done: false }, { id: uuid(), do: '睡覺', done: false }, { id: uuid(), do: '打東東', done: false }],
+                    todoText: ''
+                }
+            },
+            computed: {
+                showAllTodos() {
+                    return this.todos.length
+                },
+                showAllDone() {
+                    return this.todos.filter((todo) => {
+                        return todo.done === true
+                    }).length
+                }
+            }
+            ,
+            methods: {
+                deleteTodoItem(index) {
+                    this.todos.splice(index, 1)
+                },
+                createNewTodoItme() {
+                    if (!this.todoText) return
+                    this.todos.push({
+                        id: uuid(),
+                        do: this.todoText,
+                        done: false
+                    })
+                    this.todoText = ''
+                },
+            },
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
