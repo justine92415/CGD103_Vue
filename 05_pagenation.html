@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .products-wrapper {
+            width: 1200px;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .product {
+            width: 200px;
+        }
+
+        .product-img img {
+            width: 100%;
+        }
+
+        .btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .active {
+            background-color: #fa0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>分頁功能</h1>
+        <div class="products-wrapper">
+            <div class="product" v-for="item in products" :key="item.id">
+                <div class="product-img">
+                    <img :src="item.images[0]" alt="">
+                </div>
+                <div>
+                    <div class="product-title">{{item.title}}</div>
+                    <div class="product-price">$:&nbsp;{{item.price}}</div>
+                    <div class="product-description">{{item.description}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="btns">
+            <button v-if="currentPage>0" @click="ppp(currentPage-1)">&lt;</button>
+            <!-- 不知道api總計有多少頁，假設上限5頁 -->
+            <button :class="{active:index===currentPage}" v-for="(page,index) in 5" :key="index"
+                @click="ppp(index)">{{index+1}}</button>
+            <button v-if="currentPage<4" @click="ppp(currentPage+1)">&gt;</button>
+        </div>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    isCurrentPage: false,
+                    currentPage: 0,
+                    products: []
+                }
+            }, methods: {
+                getPageItem(p) {
+                    fetch(`https://api.escuelajs.co/api/v1/products?offset=${p * 10}&limit=10`)
+                        .then(res => res.json())
+                        .then(json => this.products = json)
+                },
+                ppp(page) {
+                    this.currentPage = page
+                    this.getPageItem(page)
+                }
+            },
+            created() {
+                this.getPageItem(this.currentPage)
+            },
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
