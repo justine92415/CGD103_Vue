@@ -54,11 +54,11 @@
             </div>
         </div>
         <div class="btns">
-            <button v-if="currentPage>0" @click="ppp(currentPage-1)">&lt;</button>
+            <button v-if="currentPage>0" @click="changeCurrentPage(currentPage-1)">&lt;</button>
             <!-- 不知道api總計有多少頁，假設上限5頁 -->
             <button :class="{active:index===currentPage}" v-for="(page,index) in 5" :key="index"
-                @click="ppp(index)">{{index+1}}</button>
-            <button v-if="currentPage<4" @click="ppp(currentPage+1)">&gt;</button>
+                @click="changeCurrentPage(index)">{{index+1}}</button>
+            <button v-if="currentPage<4" @click="changeCurrentPage(currentPage+1)">&gt;</button>
         </div>
     </div>
     <script src="https://unpkg.com/vue@next"></script>
@@ -70,15 +70,22 @@
                     currentPage: 0,
                     products: []
                 }
-            }, methods: {
-                getPageItem(p) {
-                    fetch(`https://api.escuelajs.co/api/v1/products?offset=${p * 10}&limit=10`)
+            },
+            watch: {
+                // 監聽currentPage，當currentPage變化時重新調用getPageItem並傳入newPage
+                currentPage: function (newPage, oldPage) {
+                    this.getPageItem(newPage)
+                }
+            }
+            , methods: {
+                // 取得某一頁商品資料
+                getPageItem(page) {
+                    fetch(`https://api.escuelajs.co/api/v1/products?offset=${page * 10}&limit=10`)
                         .then(res => res.json())
                         .then(json => this.products = json)
                 },
-                ppp(page) {
+                changeCurrentPage(page) {
                     this.currentPage = page
-                    this.getPageItem(page)
                 }
             },
             created() {

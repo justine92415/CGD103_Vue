@@ -142,7 +142,6 @@
                     fetch('https://fake-hotel-api.herokuapp.com/api/hotels?count=50&no_error=1')
                         .then(res => res.json())
                         .then(json => {
-                            // 資料預處理，只取我要的資料
                             this.source = json.map((hotel) => {
                                 return {
                                     id: hotel.id,
@@ -156,7 +155,7 @@
                             this.catch = this.source
                             this.load = false
                         }).catch(error => {
-                            // 他們的伺服器不知道為什麼有時候會500，這邊做error handling，請使用者重整頁面
+                            // 他們的伺服器不知道為什麼有時候會500，做error handling，請使用者重整頁面
                             alert(`伺服器因不明原因抓不到資料，請重整頁面`)
                         })
                 },
