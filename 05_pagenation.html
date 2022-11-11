@@ -54,11 +54,11 @@
             </div>
         </div>
         <div class="btns">
-            <button v-if="currentPage>0" @click="changeCurrentPage(currentPage-1)">&lt;</button>
+            <button v-show="currentPage>0" @click="changeCurrentPage(currentPage-1)">&lt;</button>
             <!-- 不知道api總計有多少頁，假設上限5頁 -->
             <button :class="{active:index===currentPage}" v-for="(page,index) in 5" :key="index"
                 @click="changeCurrentPage(index)">{{index+1}}</button>
-            <button v-if="currentPage<4" @click="changeCurrentPage(currentPage+1)">&gt;</button>
+            <button v-show="currentPage<4" @click="changeCurrentPage(currentPage+1)">&gt;</button>
         </div>
     </div>
     <script src="https://unpkg.com/vue@next"></script>
