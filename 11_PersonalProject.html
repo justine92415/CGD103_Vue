@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0"">
+    <title>產品一覽</title>
+    <link rel=" stylesheet" href="./CSS/reset.css">
+    <link rel="stylesheet" href="./CSS/grid.css">
+    <link rel="stylesheet" href="./CSS/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <div class="nav-container">
+                <div class="row navbar">
+                    <div class="col-3">
+                        <div class="logo-box">
+                            <a href="index.html">
+                                <img src="assets/LOGO.png" alt="商標圖案">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="nav-group">
+                            <li class="nav-item">
+                                <a href="products.html" data-en="Products">
+                                    <span class="show1">產品一覽</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" data-en="Customize">
+                                    <span class="show1">客製禮盒</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" data-en="AboutUs">
+                                    <span class="show1">關於我們</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" data-en="News">
+                                    <span class="show1">最新資訊</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" data-en="FAQ">
+                                    <span class="show1">訂購須知</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="icon-group">
+                            <a href="11_shoppingCarts.html" class="icon-item icon-item--cart">
+                                <div class="current-quantity">{{cartCount}}</div>
+                                <ion-icon name="cart-outline"></ion-icon>
+                            </a>
+
+                            <a href="#" class="icon-item icon-item--user">
+                                <ion-icon name="person-circle-outline"></ion-icon>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-3 menu-box">
+                        <div class="btn-menu">
+                            <ion-icon class="icon-menu icon-active" name="menu-outline"></ion-icon>
+                            <ion-icon class="icon-close" name="close-outline"></ion-icon>
+                        </div>
+
+                    </div>
+                    <div class="menu-content ">
+                        <div class="menu-item">
+                            <a href="products.html">產品一覽</a>
+                        </div>
+                        <div class="menu-item">
+                            <a href="customize.html">客製禮盒</a>
+                        </div>
+                        <div class="menu-item">
+                            <a href="about.html">關於我們</a>
+                        </div>
+                        <div class="menu-item">
+                            <a href="news.html">最新資訊</a>
+                        </div>
+                        <div class="menu-item">
+                            <a href="faq.html">訂購須知</a>
+                        </div>
+
+                        <div class="menu-item ">
+                            <a href="shopingCart.html" class="icon-item icon-item--cart">
+                                <div class="current-quantity">0</div>
+                                <ion-icon name="cart-outline"></ion-icon>
+                            </a>
+
+                            <a href="#" class="icon-item icon-item--user">
+                                <ion-icon name="person-circle-outline"></ion-icon>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
+        <main>
+            <div class="container">
+
+                <!-- Banner -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="products-banner">
+                            <div class="banner-img">
+                                <h2 class="banner-header">產品一覽</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 麵包屑 -->
+                <div class="products-breadcrumbs">
+                    <ol class="breadcrumbs-list">
+                        <li class="breadcrumbs-item">
+                            <a href="index.html">首頁</a>
+                        </li>
+
+                        <li class="breadcrumbs-item">
+                            <a href="#">產品一覽</a>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-3">
+                        <div class="row category-group">
+                            <div class=" col-6 col-md-12" v-for="(category,index) in categories" :key="index">
+                                <div class="category-item" @click="changeCategory(category.en)">{{category.ch}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-12 col-md-9">
+
+
+                        <div class="row row-head">
+                            <div class="col-12 col-md-4">
+                                <div class="category-title">
+                                    {{currentCategory}}
+                                </div>
+                            </div>
+
+                            <!-- 依...排序 -->
+                            <div class="col-6 col-md-4">
+                                <div class="sort-box">
+                                    <select class="sort-sel" v-model="currentSort">
+                                        <option class="sort-opt" v-for="option in sortList" :value="option.value">
+                                            {{option.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 顯示商品總數 -->
+                            <div class="col-6 col-md-4">
+                                <div class="collection-mode">
+                                    <div class="products-total">
+                                        共{{this.total}}件商品
+                                    </div>
+                                    <!-- <div class="mode mode-grid">
+                                        <ion-icon class="mode-icon" name="grid-outline">
+                                        </ion-icon>
+                                    </div>
+                                    <div class="mode mode-list">
+                                        <ion-icon class="mode-icon" name="list-outline">
+                                        </ion-icon>
+                                    </div> -->
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row row-body">
+                            <div :class="{loader:load}"></div>
+                            <div class="col-6 col-md-4 " v-for="(item,index) in source" :key="item.id">
+                                <div class="product-card">
+                                    <div class="product-img">
+                                        <div class="hovershow desktopshow">
+                                            <p class="hovershow-name">{{item.name}}</p>
+                                            <span class="hovershow-div"></span>
+                                            <p class="hovershow-price">NT.&nbsp{{item.price}}</p>
+                                            <p class="hovershow-description">
+                                                {{item.description}}
+                                            </p>
+                                            <div class="hovershow-carts">
+                                                <button class="carts-btn btn-minus-dt" @click="reduceCount(item,index)">
+                                                    <ion-icon name="remove-outline"></ion-icon>
+                                                </button>
+                                                <input class="carts-quantity input-quantity-dt" type="number" min="1"
+                                                    max="99" v-model="count[index]">
+                                                <button class="carts-btn btn-plus-dt" @click="addCount(item,index)">
+                                                    <ion-icon name="add-outline"></ion-icon>
+                                                </button>
+                                                <button class="carts-btn btn-tocarts-dt" @click="addToCart(item,index)">
+                                                    <ion-icon name="cart-outline"></ion-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <a href="#">
+                                            <img :src="imgURL+item.images[0]">
+                                        </a>
+                                    </div>
+
+
+                                    <div class="product-content">
+                                        <div class="viewlink">
+                                            <!-- <a href="single.html?id=${choco.id}">詳細介紹</a> -->
+                                            <a href="#">詳細介紹</a>
+                                        </div>
+                                        <div class="product-name">{{item.name}}</div>
+                                        <div class="product-price">
+                                            <span class="rating">
+                                                <ion-icon item-start class="star" name="star"></ion-icon>
+                                                {{item.ratingsAverage}}&nbsp&nbsp(&nbsp{{item.ratingsQuantity}}&nbsp)
+                                            </span>
+                                            NT.&nbsp{{item.price}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-footer">
+                            <div class="col-12">
+                                <ul class="pagination">
+                                    <li class="page-numbers" v-show="currentPage>1" @click="changePage(currentPage-1)">
+                                        <ion-icon name="chevron-back-outline"></ion-icon>
+                                    </li>
+                                    <li class="page-numbers" :class="{current:currentPage===index+1}"
+                                        v-for="(page,index) in pagenation" :key="index" @click="changePage(index+1)">
+                                        {{page}}
+                                    </li>
+                                    <li class="page-numbers" v-show="currentPage<pagenation"
+                                        @click="changePage(currentPage+1)">
+                                        <ion-icon name="chevron-forward-outline"></ion-icon>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container test">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="footer-nav">
+                        <a href="products.html">產品一覽</a>
+                        <a href="customize.html">客製禮盒</a>
+                        <a href="about.html">關於我們</a>
+                        <a href="news.html">最新資訊</a>
+                        <a href="faq.html">訂購須知</a>
+                    </nav>
+                </div>
+
+                <div class="col-12">
+                    <ul class="footer-information">
+                        <li class="footer-tel">
+                            <ion-icon class="footer-icon" name="call-outline"></ion-icon>
+                            <span class="ftest">03-425-1108</span>
+                        </li>
+                        <li class="footer-address">
+                            <ion-icon class="footer-icon" name="location-outline"></ion-icon>
+                            <span class="ftest">320桃園市中壢區復興路46號9樓</span>
+                        </li>
+                        <li class="footer-mail">
+                            <ion-icon class="footer-icon" name="mail-outline"></ion-icon>
+                            <span class="ftest">27Chocolate@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-12">
+                    <div class="footer-ohter">
+                        <p footer-other>本網站為緯育TibaMe前端設計工程師班學員專題作品，本平台僅供學習、展示之用。</p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </footer>
+    </div>
+
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    load: false,
+                    count: [],
+                    source: [],
+                    imgURL: './assets/chocoproducts/',
+                    total: 0,
+                    pagenation: 0,
+                    currentPage: 1,
+                    categories: [{ ch: "夾心巧克力", en: 'bonbons' }, { ch: "生巧克力", en: 'raw' }, { ch: "片狀巧克力", en: 'bar' }, { ch: "巧克力甜點", en: 'other' }],
+                    currentCategory: 'bonbons',
+                    sortList: [{ text: '價格排序 低~高', value: 'price' }, { text: '價格排序 高~低', value: '-price' }, { text: '評價排序', value: '-ratingsAverage' }, { text: '評論數量', value: 'ratingsQuantity' }],
+                    currentSort: 'price',
+                    order: []
+                }
+            }, computed: {
+                cartCount() {
+                    return this.order.length
+                }
+            }
+            , watch: {
+                currentPage: function (newPage, oldPage) {
+                    this.source = []
+                    this.getResource(newPage, this.currentCategory, this.currentSort)
+                    this.getPagenation(this.currentCategory)
+
+                },
+                currentCategory: function (newCategory, oldCategory) {
+                    this.source = []
+                    this.getResource(this.currentPage, newCategory, this.currentSort)
+                    this.getPagenation(newCategory)
+                },
+                currentSort: function (newSort, oldSort) {
+                    this.source = []
+                    this.getResource(this.currentPage, this.currentCategory, newSort)
+                    this.getPagenation(this.currentCategory)
+                }
+            }
+            , methods: {
+                getResource(page, category, sort) {
+                    this.load = true
+                    fetch(`https://learnnodejs-3s6rmmfxwq-de.a.run.app/api/v1/tours?category=${category}&sort=${sort}&limit=6&page=${page}`)
+                        .then(res => res.json())
+                        .then(json => {
+                            this.source = json.dtat.tours
+                            this.count = []
+                            for (item in this.source) {
+                                this.count.push(1)
+                            }
+                            this.load = false
+                        })
+                },
+                getPagenation(category) {
+                    fetch(`https://learnnodejs-3s6rmmfxwq-de.a.run.app/api/v1/tours?category=${category}`)
+                        .then(res => res.json())
+                        .then(json => {
+                            this.total = json.dtat.tours.length
+                            this.pagenation = Math.ceil(json.dtat.tours.length / 6)
+                        })
+                },
+                changePage(page) {
+                    this.currentPage = page
+                },
+                changeCategory(category) {
+                    this.currentPage = 1
+                    this.currentCategory = category
+                },
+                addCount(item, index) {
+                    console.log(index);
+                    this.count[index] += 1
+                },
+                reduceCount(item, index) {
+                    if (this.count[index] <= 1) return
+                    this.count[index] -= 1
+
+                },
+                getShoppingList() {
+                    let data = localStorage.getItem('shoppingList')
+                    data = JSON.parse(data)
+                    this.order = data ? data : []
+                },
+                setShoppingList() {
+                    const data = JSON.stringify(this.order)
+                    localStorage.setItem('shoppingList', data)
+                },
+                addToCart(item, index) {
+                    const productIndex = this.order.findIndex(orderItem => {
+                        return orderItem.id === item.id
+                    })
+
+                    console.log(productIndex);
+                    if (productIndex >= 0) {
+                        this.order[productIndex].quantity = this.count[index]
+                    } else {
+                        this.order.push({
+                            id: item.id,
+                            name: item.name,
+                            price: item.price,
+                            quantity: this.count[index],
+                            image: item.images[0]
+                        })
+                    }
+                    this.setShoppingList()
+                    this.count[index] = 1
+                }
+            }
+            , mounted() {
+                // https://learnnodejs-3s6rmmfxwq-de.a.run.app/api/v1/tours/
+                this.getResource(this.currentPage, this.currentCategory, this.currentSort)
+                this.getPagenation(this.currentCategory)
+                this.getShoppingList()
+            },
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
