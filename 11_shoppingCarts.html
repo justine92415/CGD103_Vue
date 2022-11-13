@@ -255,10 +255,15 @@
                     })
                     return this.subtotalArr
                 }, total() {
-                    if (!this.order) return 0
+                    /* if (!this.order) return 0
                     let sum = 0
                     this.subtotalArr.forEach((subtotal) => {
                         sum += subtotal
+                    })
+                    return sum */
+                    let sum = 0
+                    this.order.map((item, index) => {
+                        sum += item.price * this.count[index]
                     })
                     return sum
                 }
