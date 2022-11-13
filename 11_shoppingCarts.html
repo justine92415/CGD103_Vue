@@ -243,24 +243,16 @@
                     count: [],
                     imgURL: './assets/chocoproducts/',
                     order: [],
-                    subtotalArr: []
                 }
             }, computed: {
                 cartCount() {
                     return this.order.length
                 },
                 subtotal() {
-                    this.subtotalArr = this.order.map((item, index) => {
+                    return this.order.map((item, index) => {
                         return item.price * this.count[index]
                     })
-                    return this.subtotalArr
                 }, total() {
-                    /* if (!this.order) return 0
-                    let sum = 0
-                    this.subtotalArr.forEach((subtotal) => {
-                        sum += subtotal
-                    })
-                    return sum */
                     let sum = 0
                     this.order.map((item, index) => {
                         sum += item.price * this.count[index]
