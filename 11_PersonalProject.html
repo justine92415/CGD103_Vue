@@ -323,20 +323,14 @@
             }
             , watch: {
                 currentPage: function (newPage, oldPage) {
-                    this.source = []
-                    this.getResource(newPage, this.currentCategory, this.currentSort)
-                    this.getPagenation(this.currentCategory)
-
+                    this.reacquireData(newPage, this.currentCategory, this.currentSort)
                 },
                 currentCategory: function (newCategory, oldCategory) {
-                    this.source = []
-                    this.getResource(this.currentPage, newCategory, this.currentSort)
-                    this.getPagenation(newCategory)
+                    this.reacquireData(this.currentPage, newCategory, this.currentSort)
                 },
                 currentSort: function (newSort, oldSort) {
-                    this.source = []
-                    this.getResource(this.currentPage, this.currentCategory, newSort)
-                    this.getPagenation(this.currentCategory)
+                    this.reacquireData(this.currentPage, this.currentCategory, newSort)
+
                 }
             }
             , methods: {
@@ -405,6 +399,11 @@
                     }
                     this.setShoppingList()
                     this.count[index] = 1
+                },
+                reacquireData(page, category, sort) {
+                    this.source = []
+                    this.getResource(page, category, sort)
+                    this.getPagenation(category)
                 }
             }
             , mounted() {

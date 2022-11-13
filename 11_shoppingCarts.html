@@ -15,6 +15,15 @@
         rel="stylesheet">
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        .sumtotal {
+            text-align: right;
+            font-size: 30px;
+            padding-right: 50px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -123,8 +132,8 @@
                     </ol>
                 </div>
 
-                <div>
-                    總金額為：{{total}}
+                <div class="sumtotal">
+                    總金額為：{{total}}元
                 </div>
 
                 <div class="carts-wapper">
@@ -246,6 +255,7 @@
                     })
                     return this.subtotalArr
                 }, total() {
+                    if (!this.order) return 0
                     let sum = 0
                     this.subtotalArr.forEach((subtotal) => {
                         sum += subtotal
