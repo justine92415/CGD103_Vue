@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <img class="catImg" :style="{backgroundColor: curBGC}"
+            src="../assets/exam/2cd43b_a0b132b6def44250bdeab8a658051554_mv2.png" alt="">
+        <div class="btn-box">
+            <div class="btn" @click="changeBGC(color)" :style="{backgroundColor: color}"
+                v-for="(color,index) in colors">{{color}}</div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    colors: [
+                        '#47862A', '#BD5BFB', '#5CE523', '#E50737', '#7F39F9', '#397195', '#F3FF25', '#497355', '#197DDC',
+                        '#C3E0C8'
+                    ],
+                    curBGC: '#47862A'
+                }
+            }, methods: {
+                changeBGC(color) {
+                    this.curBGC = color
+                }
+            },
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
+<style>
+    .btn-box {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .btn {
+        border: 1px solid black;
+        padding: 10px 10px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+</style>
