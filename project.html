@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>團專負責項目</title>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Koala +</h1>
+        <ul>
+            <li><a href="https://tibamef2e.com/cgd103/g1/">網站連結</a></li>
+            <li><a href="https://github.com/bear320/cgd103_g1">GitHub(請選擇dev分支)</a></li>
+        </ul>
+        <h2>測試帳號：</h2>
+        <div class="test-account">
+            <div class="front">
+                <h3>前台</h3>
+                <p>帳號：charmy111@gmail.com</p>
+                <p>密碼：charmy111</p>
+            </div>
+
+            <div class="card">
+                <h3>Tappay測試卡號</h3>
+                <p>測試卡號：5451 4178 2523 0575</p>
+                <p>到期日：01/23</p>
+                <p>CCV：123</p>
+            </div>
+
+            <div class="back">
+                <h3>後台</h3>
+                <p>帳號：Sara</p>
+                <p>密碼：1234</p>
+            </div>
+        </div>
+
+        <div class="demo-box">
+            <ul class="feature-list">
+                <p><a href="https://tibamef2e.com/cgd103/g1/shop">周邊商城</a></p>
+                <li>使用Ajax(fetch)獲取所有商品資訊</li>
+                <li>商品分類、搜尋、價格區間、分頁</li>
+            </ul>
+            <img class="demo-img" src="./assets/project/koala-1_GIF.gif" alt="">
+        </div>
+        <div class="demo-box">
+            <ul class="feature-list">
+                <p><a href="https://tibamef2e.com/cgd103/g1/shop/5015">商品詳情</a></p>
+                <li>使用Ajax(fetch)獲取單一商品詳情、以及相關商品</li>
+                <li>輪播圖</li>
+                <li>商品隨數量變化動態計算價格</li>
+                <li>加到購物車(需登入前台帳號)，若使用者購物車無此商品則新增進購物車，若有則更新商品數量</li>
+            </ul>
+            <img class="demo-img" src="./assets/project/koala-2_GIF.gif" alt="">
+        </div>
+        <div class="demo-box">
+            <ul class="feature-list">
+                <p><a href="https://tibamef2e.com/cgd103/g1/cart1">購物車(需登入前台帳號)</a></p>
+                <li>從Vuex中獲取使用者購物車的所有內容</li>
+                <li>使用者可以修改購物車項目的數量以及刪除項目，右方也會隨之動態調整總價格</li>
+                <li>使用者可自行輸入優惠碼或是"按這裡"選擇優惠碼，若輸入自身沒有的優惠碼則不會有效果</li>
+                <li>點選與會員資料相同會自動在表單填入會員相關資訊</li>
+                <li>串接Tappay的金流服務</li>
+                <li>付款完成後可至會員中心觀看剛剛消費的詳情</li>
+            </ul>
+            <img class="demo-img" src="./assets/project/koala-3_GIF.gif" alt="">
+        </div>
+        <div class="demo-box">
+            <ul class="feature-list">
+                <p><a href="https://tibamef2e.com/cgd103/g1/bs-product-list">商品管理(需登入後台帳號)</a></p>
+                <li>透過ID搜尋特定商品</li>
+                <li>依據商品ID編號做排序</li>
+                <li>即時更改商品的上下架狀態</li>
+            </ul>
+            <img class="demo-img" src="./assets/project/koala-4_GIF.gif" alt="">
+        </div>
+        <div class="demo-box">
+            <ul class="feature-list">
+                <p><a href="https://tibamef2e.com/cgd103/g1/bs-product-add">新增商品(需登入後台帳號)</a></p>
+                <li>上傳圖片</li>
+            </ul>
+            <img class="demo-img" src="./assets/project/koala-5_GIF.gif" alt="">
+        </div>
+        <div class="demo-box">
+            <ul class="feature-list">
+                <p><a href="https://tibamef2e.com/cgd103/g1/bs-product-edit/5001">編輯商品(需登入後台帳號)</a></p>
+                <li>刪除、編輯圖片</li>
+            </ul>
+            <img class="demo-img" src="./assets/project/koala-6_GIF.gif" alt="">
+        </div>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+
+                }
+            }, methods: {
+
+            },
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
+<style>
+    .test-account {
+        display: flex;
+        gap: 20px;
+    }
+
+    .test-account h3 {
+        text-align: center;
+    }
+
+    .test-account .card p {
+        text-align: center;
+    }
+
+    .demo-box {
+        margin: 0 auto;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 100px;
+    }
+
+    .feature-list {
+        font-size: 24px;
+        width: 50%;
+    }
+
+    .feature-list li {
+        margin-bottom: 10px;
+    }
+
+    .demo-img {
+        width: 50%;
+
+    }
+</style>
